@@ -1,4 +1,4 @@
-package timex
+package gormx
 
 import (
 	"database/sql"

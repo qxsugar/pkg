@@ -1,13 +1,13 @@
 package ginx
 
 import (
-	"github.com/qxsugar/pkg/loggerx"
+	"github.com/qxsugar/pkg/zapx"
 )
 
 const TAG = "ExceptionX"
 
 func NewInvalidArgumentError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewInvalidArgumentError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewInvalidArgumentError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -18,7 +18,7 @@ func NewInvalidArgumentError(err error) FailedRespBody {
 }
 
 func NewFailedPreconditionError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewFailedPreconditionError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewFailedPreconditionError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -29,7 +29,7 @@ func NewFailedPreconditionError(err error) FailedRespBody {
 }
 
 func NewOutOfRangeError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewOutOfRangeError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewOutOfRangeError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -40,7 +40,7 @@ func NewOutOfRangeError(err error) FailedRespBody {
 }
 
 func NewUnauthenticatedError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewUnauthenticatedError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewUnauthenticatedError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -51,7 +51,7 @@ func NewUnauthenticatedError(err error) FailedRespBody {
 }
 
 func NewPermissionDeniedError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewPermissionDeniedError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewPermissionDeniedError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -62,7 +62,7 @@ func NewPermissionDeniedError(err error) FailedRespBody {
 }
 
 func NewNotFoundError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewNotFoundError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewNotFoundError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -73,7 +73,7 @@ func NewNotFoundError(err error) FailedRespBody {
 }
 
 func NewAbortedError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewAbortedError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewAbortedError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -84,7 +84,7 @@ func NewAbortedError(err error) FailedRespBody {
 }
 
 func NewAlreadyExistsError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewAlreadyExistsError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewAlreadyExistsError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -95,7 +95,7 @@ func NewAlreadyExistsError(err error) FailedRespBody {
 }
 
 func NewResourceExhaustedError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewResourceExhaustedError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewResourceExhaustedError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -106,7 +106,7 @@ func NewResourceExhaustedError(err error) FailedRespBody {
 }
 
 func NewCancelledError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewCancelledError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewCancelledError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -117,7 +117,7 @@ func NewCancelledError(err error) FailedRespBody {
 }
 
 func NewDataLossError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewDataLossError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewDataLossError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -128,7 +128,7 @@ func NewDataLossError(err error) FailedRespBody {
 }
 
 func NewUnknownError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewUnknownError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewUnknownError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -139,7 +139,7 @@ func NewUnknownError(err error) FailedRespBody {
 }
 
 func NewInternalError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewInternalError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewInternalError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -150,7 +150,7 @@ func NewInternalError(err error) FailedRespBody {
 }
 
 func NewNotImplementedError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewNotImplementedError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewNotImplementedError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -161,7 +161,7 @@ func NewNotImplementedError(err error) FailedRespBody {
 }
 
 func NewUnavailableError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewUnavailableError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewUnavailableError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
@@ -172,7 +172,7 @@ func NewUnavailableError(err error) FailedRespBody {
 }
 
 func NewDeadlineExceededError(err error) FailedRespBody {
-	loggerx.GetLogger().Warnw(TAG, "fn", "NewDeadlineExceededError", "err", err)
+	zapx.GetLogger().Warnw(TAG, "fn", "NewDeadlineExceededError", "err", err)
 	return FailedRespBody{
 		Succeeded: false,
 		RespData:  nil,
