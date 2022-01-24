@@ -9,7 +9,7 @@ type FailedRespBody struct {
 	Succeeded bool        `json:"succeeded"`
 	RespData  interface{} `json:"resp_data"`
 	Code      int         `json:"code,omitempty"`
-	Info      string      `json:"info"`
+	Msg       string      `json:"msg"`
 	Desc      string      `json:"desc,omitempty"`
 }
 

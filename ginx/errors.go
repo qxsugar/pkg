@@ -12,8 +12,8 @@ func NewInvalidArgumentError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      InvalidArgument,
-		Info:      err.Error(),
-		Desc:      "客户端指定了无效的参数。 检查错误消息和错误详细信息以获取更多信息。",
+		Msg:       "参数异常",
+		Desc:      err.Error(),
 	}
 }
 
@@ -23,8 +23,8 @@ func NewFailedPreconditionError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      FailedPrecondition,
-		Info:      err.Error(),
-		Desc:      "请求不能在当前系统状态下执行，例如删除非空目录。",
+		Msg:       "执行条件异常",
+		Desc:      err.Error(),
 	}
 }
 
@@ -34,8 +34,8 @@ func NewOutOfRangeError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      OutOfRange,
-		Info:      err.Error(),
-		Desc:      "客户端指定了无效的范围。",
+		Msg:       "无效范围",
+		Desc:      err.Error(),
 	}
 }
 
@@ -45,8 +45,8 @@ func NewUnauthenticatedError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Unauthenticated,
-		Info:      err.Error(),
-		Desc:      "由于遗失，无效或过期的OAuth令牌而导致请求未通过身份验证。",
+		Msg:       "无效身份",
+		Desc:      err.Error(),
 	}
 }
 
@@ -56,8 +56,8 @@ func NewPermissionDeniedError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      PermissionDenied,
-		Info:      err.Error(),
-		Desc:      "客户端没有足够的权限。这可能是因为OAuth令牌没有正确的范围，客户端没有权限，或者客户端项目尚未启用API。",
+		Msg:       "权限不足",
+		Desc:      err.Error(),
 	}
 }
 
@@ -67,8 +67,8 @@ func NewNotFoundError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      NotFound,
-		Info:      err.Error(),
-		Desc:      "找不到指定的资源，或者该请求被未公开的原因（例如白名单）拒绝。",
+		Msg:       "资源不存在",
+		Desc:      err.Error(),
 	}
 }
 
@@ -78,8 +78,8 @@ func NewAbortedError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Aborted,
-		Info:      err.Error(),
-		Desc:      "并发冲突，例如读-修改-写冲突。",
+		Msg:       "重复操作",
+		Desc:      err.Error(),
 	}
 }
 
@@ -89,8 +89,8 @@ func NewAlreadyExistsError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      AlreadyExists,
-		Info:      err.Error(),
-		Desc:      "客户端尝试创建的资源已存在。",
+		Msg:       "资源已存在",
+		Desc:      err.Error(),
 	}
 }
 
@@ -100,8 +100,8 @@ func NewResourceExhaustedError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      ResourceExhausted,
-		Info:      err.Error(),
-		Desc:      "资源配额达到速率限制。 客户端应该查找google.rpc.QuotaFailure错误详细信息以获取更多信息。",
+		Msg:       "系统繁忙",
+		Desc:      err.Error(),
 	}
 }
 
@@ -111,8 +111,8 @@ func NewCancelledError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Cancelled,
-		Info:      err.Error(),
-		Desc:      "客户端取消请求。",
+		Msg:       "客户端取消请求",
+		Desc:      err.Error(),
 	}
 }
 
@@ -122,8 +122,8 @@ func NewDataLossError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      DataLoss,
-		Info:      err.Error(),
-		Desc:      "不可恢复的数据丢失或数据损坏。 客户端应该向用户报告错误。",
+		Msg:       "数据已损坏",
+		Desc:      err.Error(),
 	}
 }
 
@@ -133,8 +133,8 @@ func NewUnknownError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Unknown,
-		Info:      err.Error(),
-		Desc:      "未知的服务器错误。 通常是服务器错误。",
+		Msg:       "未知错误",
+		Desc:      err.Error(),
 	}
 }
 
@@ -144,8 +144,8 @@ func NewInternalError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Internal,
-		Info:      err.Error(),
-		Desc:      "内部服务错误。 通常是服务器错误。",
+		Msg:       "内部错误",
+		Desc:      err.Error(),
 	}
 }
 
@@ -155,8 +155,8 @@ func NewNotImplementedError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      NotImplemented,
-		Info:      err.Error(),
-		Desc:      "服务器未实现该API方法。",
+		Msg:       "方法未实现",
+		Desc:      err.Error(),
 	}
 }
 
@@ -166,8 +166,8 @@ func NewUnavailableError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      Unavailable,
-		Info:      err.Error(),
-		Desc:      "暂停服务。通常是服务器已经关闭。",
+		Msg:       "暂停服务",
+		Desc:      err.Error(),
 	}
 }
 
@@ -177,7 +177,7 @@ func NewDeadlineExceededError(err error) FailedRespBody {
 		Succeeded: false,
 		RespData:  nil,
 		Code:      DeadlineExceeded,
-		Info:      err.Error(),
-		Desc:      "已超过请求期限。如果重复发生，请考虑降低请求的复杂性。",
+		Msg:       "系统无法执行",
+		Desc:      err.Error(),
 	}
 }
