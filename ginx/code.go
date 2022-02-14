@@ -22,3 +22,17 @@ const (
 	Unavailable        = 503 // 暂停服务。通常是服务器已经关闭。
 	DeadlineExceeded   = 504 // 已超过请求期限。如果重复发生，请考虑降低请求的复杂性。
 )
+
+var messages = map[int]string{
+	InvalidArgument:   "参数异常",
+	Unauthenticated:   "无效身份",
+	PermissionDenied:  "权限不足",
+	NotFound:          "资源不存在",
+	AlreadyExists:     "资源已存在",
+	ResourceExhausted: "系统繁忙",
+	Cancelled:         "客户端取消请求",
+	Internal:          "内部错误",
+	NotImplemented:    "方法未实现",
+	Unavailable:       "暂停服务",
+	DeadlineExceeded:  "系统无法执行",
+}
