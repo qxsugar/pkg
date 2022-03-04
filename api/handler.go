@@ -7,7 +7,7 @@ import (
 
 type HandlerFunc func(ctx *gin.Context) (interface{}, error)
 
-func WrapperHandler(fun HandlerFunc) gin.HandlerFunc {
+func W(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		resp, err := fun(ctx)
 		if err != nil {
