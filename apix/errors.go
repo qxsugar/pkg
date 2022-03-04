@@ -1,7 +1,7 @@
-package api
+package apix
 
 import (
-	"github.com/qxsugar/pkg/logging"
+	"github.com/qxsugar/pkg/loggerx"
 )
 
 type Error struct {
@@ -17,7 +17,7 @@ func (e Error) Error() string {
 const TAG = "[API_ERROR]"
 
 func newError(err error, code int, msg string) Error {
-	logger := logging.GetLogger()
+	logger := loggerx.GetLogger()
 	logger.Warnw(TAG, "err", err, "code", code, "msg", msg)
 	if msg == "" {
 		msg = messages[code]

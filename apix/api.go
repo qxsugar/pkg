@@ -1,4 +1,4 @@
-package api
+package apix
 
 type RespBody struct {
 	Succeeded bool        `json:"succeeded"`

@@ -1,4 +1,4 @@
-package db
+package dbx
 
 import (
 	"database/sql"

@@ -1,4 +1,4 @@
-package api
+package apix
 
 // 错误码
 // 参考[google规范](https://www.bookstack.cn/read/API-design-guide/API-design-guide-07-%E9%94%99%E8%AF%AF.md)

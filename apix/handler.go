@@ -1,4 +1,4 @@
-package api
+package apix
 
 import (
 	"github.com/gin-gonic/gin"
