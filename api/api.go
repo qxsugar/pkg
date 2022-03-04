@@ -1,15 +1,10 @@
-package ginx
+package api
 
-type SuccessfulRespBody struct {
-	Succeeded bool        `json:"succeeded"`
-	RespData  interface{} `json:"resp_data"`
-}
-
-type FailedRespBody struct {
+type RespBody struct {
 	Succeeded bool        `json:"succeeded"`
 	RespData  interface{} `json:"resp_data"`
 	Code      int         `json:"code,omitempty"`
-	Msg       string      `json:"msg"`
+	Msg       string      `json:"msg,omitempty"`
 	Desc      string      `json:"desc,omitempty"`
 }
 

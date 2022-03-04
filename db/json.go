@@ -1,4 +1,4 @@
-package gormx
+package db
 
 import (
 	"database/sql"
