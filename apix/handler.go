@@ -11,13 +11,8 @@ func W(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		resp, err := fun(ctx)
 		if err != nil {
-			if e, ok := err.(Error); ok {
-				ctx.JSON(e.Code, RespBody{
-					Succeeded: false,
-					Code:      e.Code,
-					Msg:       e.Msg,
-					Desc:      e.ErrMsg,
-				})
+			if e, ok := err.(RespBody); ok {
+				ctx.JSON(e.Code, resp)
 				return
 			} else {
 				ctx.JSON(Internal, newError(err, Internal, "服务内部出错"))

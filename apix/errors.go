@@ -4,19 +4,13 @@ import (
 	"github.com/qxsugar/pkg/loggerx"
 )
 
-type Error struct {
-	Code   int
-	Msg    string
-	ErrMsg string
-}
-
-func (e Error) Error() string {
-	return e.ErrMsg
+func (e RespBody) Error() string {
+	return e.Msg
 }
 
 const TAG = "[API_ERROR]"
 
-func newError(err error, code int, msg string) Error {
+func newError(err error, code int, msg string) RespBody {
 	logger := loggerx.GetLogger()
 	logger.Warnw(TAG, "err", err, "code", code, "msg", msg)
 	if msg == "" {
@@ -26,10 +20,12 @@ func newError(err error, code int, msg string) Error {
 	if err != nil {
 		desc = err.Error()
 	}
-	return Error{
-		Code:   code,
-		Msg:    msg,
-		ErrMsg: desc,
+	return RespBody{
+		Code:      code,
+		Msg:       msg,
+		Succeeded: false,
+		RespData:  nil,
+		Desc:      desc,
 	}
 }
 
