@@ -10,11 +10,11 @@ import (
 
 type JSON json.RawMessage
 
-func (j *JSON) MarshalJSON() ([]byte, error) {
-	if j == nil || len(*j) == 0 {
+func (j JSON) MarshalJSON() ([]byte, error) {
+	if j == nil || len(j) == 0 {
 		return []byte("null"), nil
 	}
-	return *j, nil
+	return j, nil
 }
 
 func (j *JSON) Scan(value interface{}) error {
