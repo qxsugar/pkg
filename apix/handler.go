@@ -12,7 +12,7 @@ func W(fun HandlerFunc) gin.HandlerFunc {
 		resp, err := fun(ctx)
 		if err != nil {
 			if e, ok := err.(RespBody); ok {
-				ctx.JSON(e.Code, resp)
+				ctx.JSON(e.Code, e)
 				return
 			} else {
 				ctx.JSON(Internal, newError(err, Internal, "服务内部出错"))
