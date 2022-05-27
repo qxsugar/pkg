@@ -11,7 +11,7 @@ type RespBody struct {
 type PageBody struct {
 	Offset int         `json:"offset"`
 	Limit  int         `json:"limit"`
-	Total  int         `json:"total"`
+	Total  int64       `json:"total"`
 	List   interface{} `json:"list"`
 }
 
