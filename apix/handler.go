@@ -17,37 +17,29 @@ func NewRouterGroup(group *gin.RouterGroup) *RouterGroup {
 	}
 }
 
-func (r *RouterGroup) GET(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	r.gin.GET(relativePath, wHandlers(handlers)...)
+func (r *RouterGroup) GET(relativePath string, handler HandlerFunc) *RouterGroup {
+	r.gin.GET(relativePath, W(handler))
 	return r
 }
 
-func (r *RouterGroup) POST(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	r.gin.POST(relativePath, wHandlers(handlers)...)
+func (r *RouterGroup) POST(relativePath string, handler HandlerFunc) *RouterGroup {
+	r.gin.POST(relativePath, W(handler))
 	return r
 }
 
-func (r *RouterGroup) DELETE(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	r.gin.DELETE(relativePath, wHandlers(handlers)...)
+func (r *RouterGroup) DELETE(relativePath string, handler HandlerFunc) *RouterGroup {
+	r.gin.DELETE(relativePath, W(handler))
 	return r
 }
 
-func (r *RouterGroup) PATCH(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	r.gin.PATCH(relativePath, wHandlers(handlers)...)
+func (r *RouterGroup) PATCH(relativePath string, handler HandlerFunc) *RouterGroup {
+	r.gin.PATCH(relativePath, W(handler))
 	return r
 }
 
-func (r *RouterGroup) PUT(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	r.gin.PUT(relativePath, wHandlers(handlers)...)
+func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup {
+	r.gin.PUT(relativePath, W(handler))
 	return r
-}
-
-func wHandlers(handlers []HandlerFunc) []gin.HandlerFunc {
-	funList := make([]gin.HandlerFunc, 0, len(handlers))
-	for _, fun := range handlers {
-		funList = append(funList, W(fun))
-	}
-	return funList
 }
 
 func W(fun HandlerFunc) gin.HandlerFunc {
