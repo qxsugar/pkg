@@ -18,31 +18,31 @@ func NewRouterGroup(group *gin.RouterGroup) *RouterGroup {
 }
 
 func (r *RouterGroup) GET(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.GET(relativePath, w(handler))
+	r.gin.GET(relativePath, wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) POST(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.POST(relativePath, w(handler))
+	r.gin.POST(relativePath, wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) DELETE(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.DELETE(relativePath, w(handler))
+	r.gin.DELETE(relativePath, wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) PATCH(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.PATCH(relativePath, w(handler))
+	r.gin.PATCH(relativePath, wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.PUT(relativePath, w(handler))
+	r.gin.PUT(relativePath, wrapper(handler))
 	return r
 }
 
-func w(fun HandlerFunc) gin.HandlerFunc {
+func wrapper(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		resp, err := fun(ctx)
 		if err != nil {

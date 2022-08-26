@@ -1,7 +1,7 @@
 package apix
 
 import (
-	"github.com/qxsugar/pkg/loggerx"
+	"go.uber.org/zap"
 )
 
 func (e RespBody) Error() string {
@@ -11,7 +11,7 @@ func (e RespBody) Error() string {
 const TAG = "[API_ERROR]"
 
 func newError(err error, code int, msg string) RespBody {
-	logger := loggerx.GetLogger()
+	logger := zap.S()
 	logger.Warnw(TAG, "err", err, "code", code, "msg", msg)
 	if msg == "" {
 		msg = messages[code]
