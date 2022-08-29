@@ -19,27 +19,27 @@ func NewRouterGroup(group *gin.RouterGroup) *RouterGroup {
 }
 
 func (r *RouterGroup) GET(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.GET(relativePath, wrapper(handler))
+	r.gin.GET(relativePath, Wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) POST(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.POST(relativePath, wrapper(handler))
+	r.gin.POST(relativePath, Wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) DELETE(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.DELETE(relativePath, wrapper(handler))
+	r.gin.DELETE(relativePath, Wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) PATCH(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.PATCH(relativePath, wrapper(handler))
+	r.gin.PATCH(relativePath, Wrapper(handler))
 	return r
 }
 
 func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup {
-	r.gin.PUT(relativePath, wrapper(handler))
+	r.gin.PUT(relativePath, Wrapper(handler))
 	return r
 }
 
@@ -59,7 +59,7 @@ type ApiException interface {
 	GetDesc() string
 }
 
-func wrapper(fun HandlerFunc) gin.HandlerFunc {
+func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		resp, err := fun(ctx)
 		if err == nil {
