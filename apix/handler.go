@@ -1,6 +1,7 @@
 package apix
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -42,21 +43,62 @@ func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup
 	return r
 }
 
+type RespBody struct {
+	Succeeded bool        `json:"succeeded"`
+	RespData  interface{} `json:"resp_data"`
+	HttpCode  int         `json:"-"`
+	Code      int         `json:"code,omitempty"`
+	Msg       string      `json:"msg,omitempty"`
+	Desc      string      `json:"desc,omitempty"`
+}
+
+type ApiException interface {
+	GetHttpCode() int
+	GetCode() int
+	GetMsg() string
+	GetDesc() string
+}
+
 func wrapper(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		resp, err := fun(ctx)
-		if err != nil {
-			if e, ok := err.(RespBody); ok {
-				ctx.JSON(e.Code, e)
-			} else {
-				ctx.JSON(Internal, newError(err, Internal, "服务内部出错"))
-			}
+		if err == nil {
+			ctx.JSON(http.StatusOK, RespBody{
+				Succeeded: true,
+				RespData:  resp,
+			})
 			return
 		}
 
-		ctx.JSON(http.StatusOK, RespBody{
-			Succeeded: true,
-			RespData:  resp,
+		apiException, ok := err.(ApiException)
+		if !ok {
+			ctx.JSON(http.StatusInternalServerError, RespBody{
+				Succeeded: false,
+				RespData:  nil,
+				Code:      http.StatusInternalServerError,
+				Msg:       "Unknown Error",
+				Desc:      err.Error(),
+			})
+			return
+		}
+
+		if apiException.GetHttpCode() < 100 || apiException.GetHttpCode() > 505 {
+			ctx.JSON(http.StatusInternalServerError, RespBody{
+				Succeeded: false,
+				RespData:  nil,
+				Code:      apiException.GetCode(),
+				Msg:       fmt.Sprintf("invalid http code: %d", apiException.GetHttpCode()),
+				Desc:      apiException.GetDesc(),
+			})
+			return
+		}
+
+		ctx.JSON(apiException.GetHttpCode(), RespBody{
+			Succeeded: false,
+			RespData:  nil,
+			Code:      apiException.GetCode(),
+			Msg:       apiException.GetMsg(),
+			Desc:      apiException.GetDesc(),
 		})
 		return
 	}
