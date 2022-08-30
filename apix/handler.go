@@ -1,10 +1,11 @@
 package apix
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
+
+var Debug = true
 
 type HandlerFunc func(ctx *gin.Context) (interface{}, error)
 
@@ -70,35 +71,36 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 			return
 		}
 
+		desc := ""
 		apiException, ok := err.(ApiException)
 		if !ok {
+			if Debug {
+				desc = err.Error()
+			}
 			ctx.JSON(http.StatusInternalServerError, RespBody{
 				Succeeded: false,
 				RespData:  nil,
 				Code:      http.StatusInternalServerError,
 				Msg:       "Unknown Error",
-				Desc:      err.Error(),
+				Desc:      desc,
 			})
 			return
 		}
 
+		httpCode := apiException.GetHttpCode()
 		if apiException.GetHttpCode() < 100 || apiException.GetHttpCode() > 505 {
-			ctx.JSON(http.StatusInternalServerError, RespBody{
-				Succeeded: false,
-				RespData:  nil,
-				Code:      apiException.GetCode(),
-				Msg:       fmt.Sprintf("invalid http code: %d", apiException.GetHttpCode()),
-				Desc:      apiException.GetDesc(),
-			})
-			return
+			httpCode = http.StatusInternalServerError
+		}
+		if Debug {
+			desc = apiException.GetDesc()
 		}
 
-		ctx.JSON(apiException.GetHttpCode(), RespBody{
+		ctx.JSON(httpCode, RespBody{
 			Succeeded: false,
 			RespData:  nil,
 			Code:      apiException.GetCode(),
 			Msg:       apiException.GetMsg(),
-			Desc:      apiException.GetDesc(),
+			Desc:      desc,
 		})
 		return
 	}

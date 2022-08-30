@@ -34,7 +34,7 @@ func (e Exception) Error() string {
 
 var _ ApiException = (*Exception)(nil)
 
-func newException(httpCode, code int, msg string, err error) Exception {
+func newException(httpCode, code int, msg string, err error) error {
 	logger := zap.S()
 	logger.Infof("%s: httpCode:%d, code: %d, msg: %s, err: %v", "[API_ERROR]", httpCode, code, msg, err)
 	if msg == "" {
@@ -46,7 +46,7 @@ func newException(httpCode, code int, msg string, err error) Exception {
 		desc = err.Error()
 	}
 
-	return Exception{
+	return &Exception{
 		HttpCode: httpCode,
 		Code:     code,
 		Msg:      msg,
