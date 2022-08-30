@@ -4,17 +4,17 @@ import (
 	"go.uber.org/zap"
 )
 
-var logger *zap.SugaredLogger
+var logger *zap.Logger
 
 func init() {
-	_logger, err := zap.NewProduction()
+	var err error
+	logger, err = zap.NewDevelopment()
 	if err != nil {
 		panic(err)
 	}
-	zap.ReplaceGlobals(_logger)
-	logger = _logger.Sugar()
+	zap.ReplaceGlobals(logger)
 }
 
 func GetLogger() *zap.SugaredLogger {
-	return logger
+	return logger.Sugar()
 }
