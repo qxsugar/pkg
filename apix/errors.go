@@ -25,7 +25,7 @@ func (e *Exception) GetMsg() string {
 
 func (e Exception) Error() string {
 	if e.err != nil {
-		return e.Error()
+		return e.err.Error()
 	}
 	return "unknown error"
 }
