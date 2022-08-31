@@ -62,7 +62,6 @@ type ApiException interface {
 	GetHttpCode() int
 	GetBusinessCode() int
 	GetMsg() string
-	GetDesc() string
 	Error() string
 }
 
@@ -101,7 +100,7 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 			respBody.Code = apiException.GetBusinessCode()
 			respBody.Msg = apiException.GetMsg()
 			if IsDebug() {
-				respBody.Desc = err.Error()
+				respBody.Desc = apiException.Error()
 			}
 		}
 

@@ -23,18 +23,11 @@ func (e *Exception) GetMsg() string {
 	return e.msg
 }
 
-func (e *Exception) GetDesc() string {
-	if e.err != nil {
-		return e.Error()
-	}
-	return ""
-}
-
 func (e Exception) Error() string {
 	if e.err != nil {
 		return e.Error()
 	}
-	return e.msg
+	return "unknown error"
 }
 
 func (e *Exception) WithErr(err error) *Exception {
