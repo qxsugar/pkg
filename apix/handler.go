@@ -2,10 +2,15 @@ package apix
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"net/http"
 )
 
 var Debug = true
+
+func IsDebug() bool {
+	return Debug
+}
 
 type HandlerFunc func(ctx *gin.Context) (interface{}, error)
 
@@ -55,7 +60,7 @@ type RespBody struct {
 
 type ApiException interface {
 	GetHttpCode() int
-	GetCode() int
+	GetBusinessCode() int
 	GetMsg() string
 	GetDesc() string
 	Error() string
@@ -63,6 +68,7 @@ type ApiException interface {
 
 func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		logger := zap.S()
 		resp, err := fun(ctx)
 		if err == nil {
 			ctx.JSON(http.StatusOK, RespBody{
@@ -72,37 +78,34 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 			return
 		}
 
-		desc := ""
 		apiException, ok := err.(ApiException)
+
+		respBody := RespBody{}
+		httpCode := http.StatusOK
 		if !ok {
-			if Debug {
-				desc = err.Error()
-			}
-			ctx.JSON(http.StatusInternalServerError, RespBody{
-				Succeeded: false,
-				RespData:  nil,
-				Code:      http.StatusInternalServerError,
-				Msg:       "Unknown Error",
-				Desc:      desc,
-			})
-			return
-		}
-
-		httpCode := apiException.GetHttpCode()
-		if apiException.GetHttpCode() < 100 || apiException.GetHttpCode() > 505 {
+			logger.Warnf("failed to handler http, unkonwn error: %v", err)
 			httpCode = http.StatusInternalServerError
-		}
-		if Debug {
-			desc = apiException.GetDesc()
+			respBody.Succeeded = false
+			respBody.Code = -1
+			respBody.Msg = "Unknown Error"
+			if IsDebug() && err != nil {
+				respBody.Desc = err.Error()
+			}
+		} else {
+			if apiException.GetHttpCode() < 100 || apiException.GetHttpCode() > 505 {
+				httpCode = http.StatusInternalServerError
+			} else {
+				httpCode = apiException.GetHttpCode()
+			}
+			respBody.Succeeded = false
+			respBody.Code = apiException.GetBusinessCode()
+			respBody.Msg = apiException.GetMsg()
+			if IsDebug() {
+				respBody.Desc = err.Error()
+			}
 		}
 
-		ctx.JSON(httpCode, RespBody{
-			Succeeded: false,
-			RespData:  nil,
-			Code:      apiException.GetCode(),
-			Msg:       apiException.GetMsg(),
-			Desc:      desc,
-		})
+		ctx.JSON(httpCode, respBody)
 		return
 	}
 }
