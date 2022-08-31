@@ -56,7 +56,7 @@ func NewErrorWithStatusOk(businessCode int, msg string) *Exception {
 }
 
 // NewErrorWithStatusOkAutoMsg 状态码默认200，根据错误码创建一个Error（错误描述从 错误码表 中获取）
-func NewErrorWithStatusOkAutoMsg(businessCode int) error {
+func NewErrorWithStatusOkAutoMsg(businessCode int) *Exception {
 	return &Exception{
 		httpCode:     http.StatusOK,
 		businessCode: businessCode,
@@ -65,7 +65,7 @@ func NewErrorWithStatusOkAutoMsg(businessCode int) error {
 }
 
 // NewErrorAutoMsg 根据状态码、错误码创建一个Error
-func NewErrorAutoMsg(httpCode, businessCode int) error {
+func NewErrorAutoMsg(httpCode, businessCode int) *Exception {
 	return &Exception{
 		httpCode:     httpCode,
 		businessCode: businessCode,

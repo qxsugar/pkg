@@ -82,7 +82,6 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 		respBody := RespBody{}
 		httpCode := http.StatusOK
 		if !ok {
-			logger.Warnf("failed to handler http, unkonwn error: %v", err)
 			httpCode = http.StatusInternalServerError
 			respBody.Succeeded = false
 			respBody.Code = -1
@@ -103,6 +102,8 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 				respBody.Desc = apiException.Error()
 			}
 		}
+
+		logger.Warnf("failed to handler http, httpCode: %d, businessCode: %d, msg: %s, desc: %s", httpCode, respBody.Code, respBody.Msg, respBody.Desc)
 
 		ctx.JSON(httpCode, respBody)
 		return
