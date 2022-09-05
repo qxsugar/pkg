@@ -35,132 +35,121 @@ func (e *Exception) WithErr(err error) *Exception {
 	return e
 }
 
+func (e *Exception) WithHttpCode(code int) *Exception {
+	e.httpCode = code
+	return e
+}
+
+func (e *Exception) WithBusinessCode(code int) *Exception {
+	e.businessCode = code
+	return e
+}
+
+func (e *Exception) WithMsg(msg string) *Exception {
+	e.msg = msg
+	return e
+}
+
 var _ ApiException = (*Exception)(nil)
 
-// NewError 根据状态码、错误码、错误描述创建一个Error
-func NewError(httpCode, businessCode int, msg string) *Exception {
+// NewError httpCode: 200, code: 0, msg: "", desc: ""
+func NewError() *Exception {
 	return &Exception{
-		httpCode:     httpCode,
-		businessCode: businessCode,
-		msg:          msg,
+		httpCode: http.StatusOK,
 	}
 }
 
-// NewErrorWithStatusOk 状态码默认200，根据错误码、错误描述创建一个Error
+// NewErrorWithStatusOk httpCode: 200, code: businessCode, msg: msg, desc: ""
 func NewErrorWithStatusOk(businessCode int, msg string) *Exception {
-	return &Exception{
-		httpCode:     http.StatusOK,
-		businessCode: businessCode,
-		msg:          msg,
-	}
+	return NewError().WithHttpCode(http.StatusOK).WithBusinessCode(businessCode).WithMsg(msg)
 }
 
-// NewErrorWithStatusOkAutoMsg 状态码默认200，根据错误码创建一个Error（错误描述从 错误码表 中获取）
+// NewErrorWithStatusOkAutoMsg httpCode: 200, code: businessCode, msg: "", desc: ""
 func NewErrorWithStatusOkAutoMsg(businessCode int) *Exception {
-	return &Exception{
-		httpCode:     http.StatusOK,
-		businessCode: businessCode,
-		msg:          "",
-	}
+	return NewError().WithHttpCode(http.StatusOK).WithBusinessCode(businessCode).WithMsg("")
 }
 
-// NewErrorAutoMsg 根据状态码、错误码创建一个Error
+// NewErrorAutoMsg httpCode: httpCode, code: 0, msg: "", desc: ""
 func NewErrorAutoMsg(httpCode, businessCode int) *Exception {
-	return &Exception{
-		httpCode:     httpCode,
-		businessCode: businessCode,
-		msg:          "",
-	}
-}
-
-func newError(httpCode, businessCode int, msg string) *Exception {
-	if msg == "" {
-		msg = messages[businessCode]
-	}
-
-	return &Exception{
-		httpCode:     httpCode,
-		businessCode: businessCode,
-		msg:          msg,
-	}
+	return NewError().WithHttpCode(httpCode).WithBusinessCode(businessCode).WithMsg("")
 }
 
 // NewInvalidArgumentError 参数错误
-func NewInvalidArgumentError(msg string, err error) error {
-	return newError(InvalidArgument, InvalidArgument, msg).WithErr(err)
+func NewInvalidArgumentError() *Exception {
+	return NewError().WithHttpCode(InvalidArgument).WithBusinessCode(InvalidArgument).WithMsg(messages[InvalidArgument])
 }
 
 // NewFailedPreconditionError 请求不能在当前系统状态下执行，例如删除非空目录
-func NewFailedPreconditionError(msg string, err error) error {
-	return newError(FailedPrecondition, FailedPrecondition, msg).WithErr(err)
+func NewFailedPreconditionError() *Exception {
+	return NewError().WithHttpCode(FailedPrecondition).WithBusinessCode(FailedPrecondition).WithMsg(messages[FailedPrecondition])
 }
 
 // NewOutOfRangeError 客户端指定了无效的范围。
-func NewOutOfRangeError(msg string, err error) error {
-	return newError(OutOfRange, OutOfRange, msg).WithErr(err)
+func NewOutOfRangeError() *Exception {
+	return NewError().WithHttpCode(OutOfRange).WithBusinessCode(OutOfRange).WithMsg(messages[OutOfRange])
 }
 
 // NewUnauthenticatedError 由于遗失，无效或过期的OAuth令牌而导致请求未通过身份验证。
-func NewUnauthenticatedError(msg string, err error) error {
-	return newError(Unauthenticated, Unauthenticated, msg).WithErr(err)
+func NewUnauthenticatedError() *Exception {
+	return NewError().WithHttpCode(Unauthenticated).WithBusinessCode(Unauthenticated).WithMsg(messages[Unauthenticated])
 }
 
 // NewPermissionDeniedError 客户端没有足够的权限。这可能是因为OAuth令牌没有正确的范围，客户端没有权限，或者客户端项目尚未启用API。
-func NewPermissionDeniedError(msg string, err error) error {
-	return newError(PermissionDenied, PermissionDenied, msg).WithErr(err)
+func NewPermissionDeniedError() *Exception {
+	return NewError().WithHttpCode(PermissionDenied).WithBusinessCode(PermissionDenied).WithMsg(messages[PermissionDenied])
 }
 
 // NewNotFoundError 找不到指定的资源，或者该请求被未公开的原因（例如白名单）拒绝。
-func NewNotFoundError(msg string, err error) error {
-	return newError(NotFound, NotFound, msg).WithErr(err)
+func NewNotFoundError() *Exception {
+	return NewError().WithHttpCode(NotFound).WithBusinessCode(NotFound).WithMsg(messages[NotFound])
 }
 
 // NewAbortedError 并发冲突，例如读-修改-写冲突。
-func NewAbortedError(msg string, err error) error {
-	return newError(Aborted, Aborted, msg).WithErr(err)
+func NewAbortedError() *Exception {
+	return NewError().WithHttpCode(Aborted).WithBusinessCode(Aborted).WithMsg(messages[Aborted])
 }
 
 // NewAlreadyExistsError 客户端尝试创建的资源已存在。
-func NewAlreadyExistsError(msg string, err error) error {
-	return newError(AlreadyExists, AlreadyExists, msg).WithErr(err)
+func NewAlreadyExistsError() *Exception {
+	return NewError().WithHttpCode(AlreadyExists).WithBusinessCode(AlreadyExists).WithMsg(messages[AlreadyExists])
 }
 
 // NewResourceExhaustedError 资源配额达到速率限制。 客户端应该查找google.rpc.QuotaFailure错误详细信息以获取更多信息。
-func NewResourceExhaustedError(msg string, err error) error {
-	return newError(ResourceExhausted, ResourceExhausted, msg).WithErr(err)
+func NewResourceExhaustedError() *Exception {
+	return NewError().WithHttpCode(ResourceExhausted).WithBusinessCode(ResourceExhausted).WithMsg(messages[ResourceExhausted])
 }
 
 // NewCancelledError 客户端取消请求
-func NewCancelledError(msg string, err error) error {
-	return newError(Cancelled, Cancelled, msg).WithErr(err)
+func NewCancelledError() *Exception {
+	return NewError().WithHttpCode(Cancelled).WithBusinessCode(Cancelled).WithMsg(messages[Cancelled])
 }
 
 // NewDataLossError 不可恢复的数据丢失或数据损坏。 客户端应该向用户报告错误。
-func NewDataLossError(msg string, err error) error {
-	return newError(DataLoss, DataLoss, msg).WithErr(err)
+func NewDataLossError() *Exception {
+	return NewError().WithHttpCode(DataLoss).WithBusinessCode(DataLoss).WithMsg(messages[DataLoss])
 }
 
 // NewUnknownError 未知的服务器错误。 通常是服务器错误。
-func NewUnknownError(msg string, err error) error {
-	return newError(Unknown, Unknown, msg).WithErr(err)
+func NewUnknownError() *Exception {
+	return NewError().WithHttpCode(Unknown).WithBusinessCode(Unknown).WithMsg(messages[Unknown])
 }
 
 // NewInternalError 内部服务错误。 通常是服务器错误。
-func NewInternalError(msg string, err error) error {
-	return newError(Internal, Internal, msg).WithErr(err)
+func NewInternalError() *Exception {
+	return NewError().WithHttpCode(Internal).WithBusinessCode(Internal).WithMsg(messages[Internal])
 }
 
 // NewNotImplementedError 服务器未实现该API方法。
-func NewNotImplementedError(msg string, err error) error {
-	return newError(NotImplemented, NotImplemented, msg).WithErr(err)
+func NewNotImplementedError() *Exception {
+	return NewError().WithHttpCode(NotImplemented).WithBusinessCode(NotImplemented).WithMsg(messages[NotImplemented])
 }
 
 // NewUnavailableError 暂停服务。通常是服务器已经关闭。
-func NewUnavailableError(msg string, err error) error {
-	return newError(Unavailable, Unavailable, msg).WithErr(err)
+func NewUnavailableError() *Exception {
+	return NewError().WithHttpCode(Unavailable).WithBusinessCode(Unavailable).WithMsg(messages[Unavailable])
 }
 
 // NewDeadlineExceededError 已超过请求期限。如果重复发生，请考虑降低请求的复杂性。
-func NewDeadlineExceededError(msg string, err error) error {
-	return newError(DeadlineExceeded, DeadlineExceeded, msg).WithErr(err)
+func NewDeadlineExceededError() *Exception {
+	return NewError().WithHttpCode(DeadlineExceeded).WithBusinessCode(DeadlineExceeded).WithMsg(messages[DeadlineExceeded])
 }
