@@ -43,21 +43,6 @@ func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup
 	return r
 }
 
-type RespBody struct {
-	Succeeded bool        `json:"succeeded"`
-	RespData  interface{} `json:"resp_data"`
-	Code      int         `json:"code,omitempty"`
-	Info      string      `json:"info,omitempty"`
-	Desc      string      `json:"desc,omitempty"`
-}
-
-type ApiException interface {
-	HttpCode() int
-	Code() int
-	Info() string
-	Desc() string
-}
-
 func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		logger := logx.Get()
@@ -92,7 +77,7 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 
 		// limit http code
 		if httpCode < http.StatusContinue || httpCode > http.StatusNetworkAuthenticationRequired {
-			httpCode = http.StatusNonAuthoritativeInfo
+			httpCode = http.StatusInternalServerError
 		}
 
 		logger.Warnf("failed to handler http, httpCode: %d, code: %d, info: %s, desc: %s", httpCode, respBody.Code, respBody.Info, respBody.Desc)

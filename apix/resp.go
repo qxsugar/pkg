@@ -1,5 +1,13 @@
 package apix
 
+type RespBody struct {
+	Succeeded bool        `json:"succeeded"`
+	RespData  interface{} `json:"resp_data"`
+	Code      int         `json:"code,omitempty"`
+	Info      string      `json:"info,omitempty"`
+	Desc      string      `json:"desc,omitempty"`
+}
+
 type PageBody struct {
 	Offset int         `json:"offset"`
 	Limit  int         `json:"limit"`

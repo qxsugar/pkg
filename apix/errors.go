@@ -4,12 +4,21 @@ import (
 	"net/http"
 )
 
+type ApiException interface {
+	HttpCode() int
+	Code() int
+	Info() string
+	Desc() string
+}
+
 type Exception struct {
 	httpCode int    // http code
 	code     int    // business code
 	info     string // information about
 	desc     string // description of exception
 }
+
+var _ ApiException = &Exception{}
 
 func (e *Exception) HttpCode() int {
 	return e.httpCode
