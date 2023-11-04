@@ -45,7 +45,7 @@ func (e *Exception) Error() string {
 
 func (e *Exception) WithErr(err error) *Exception {
 	if err != nil {
-		e.desc = e.Error()
+		e.desc = err.Error()
 	}
 	return e
 }
