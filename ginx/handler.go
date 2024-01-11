@@ -1,4 +1,4 @@
-package apix
+package ginx
 
 import (
 	"github.com/gin-gonic/gin"
@@ -57,7 +57,7 @@ func Wrapper(fun HandlerFunc) gin.HandlerFunc {
 		respBody := RespBody{}
 
 		switch exception := err.(type) {
-		case ApiException:
+		case ApiError:
 			httpCode = exception.HttpCode()
 			respBody.Succeeded = false
 			respBody.Code = exception.Code()

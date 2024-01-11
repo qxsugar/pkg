@@ -1,4 +1,4 @@
-package apix
+package ginx
 
 import (
 	"errors"

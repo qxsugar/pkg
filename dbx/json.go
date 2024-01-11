@@ -5,12 +5,12 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 )
 
 type JSON json.RawMessage
 
 func (j JSON) MarshalJSON() ([]byte, error) {
+	// null or empty string should be marshalled to null
 	if j == nil || len(j) == 0 {
 		return []byte("null"), nil
 	}
@@ -20,20 +20,23 @@ func (j JSON) MarshalJSON() ([]byte, error) {
 func (j *JSON) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
-		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
+		return fmt.Errorf("failed to unmarshal JSONB value: %v", value)
 	}
 
 	result := json.RawMessage{}
 	err := json.Unmarshal(bytes, &result)
+	if err != nil {
+		return err
+	}
 	*j = JSON(result)
-	return err
+	return nil
 }
 
-func (j JSON) Value() (driver.Value, error) {
-	if len(j) == 0 {
+func (j *JSON) Value() (driver.Value, error) {
+	if len(*j) == 0 {
 		return nil, nil
 	}
-	return json.RawMessage(j).MarshalJSON()
+	return j.MarshalJSON()
 }
 
 var _ driver.Valuer = (*JSON)(nil)
