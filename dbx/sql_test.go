@@ -1,26 +1,18 @@
 package dbx
 
-import "testing"
+import (
+	"github.com/go-playground/assert/v2"
+	"testing"
+)
 
-func TestLikeString(t *testing.T) {
-	type TestCase struct {
-		Give string `json:"give"`
-		Want string `json:"want"`
-	}
+func TestWrapLike(t *testing.T) {
+	result := WrapLike("test")
+	expected := "%test%"
+	assert.Equal(t, expected, result)
+}
 
-	cases := []TestCase{
-		{
-			"abc",
-			"%abc%",
-		},
-		{
-			"abc%%%",
-			"%abc%%%%",
-		},
-	}
-	for _, c := range cases {
-		if c.Want != LikeString(c.Give) {
-			t.Fail()
-		}
-	}
+func TestWrapLeftLike(t *testing.T) {
+	result := WrapLeftLike("test")
+	expected := "%test"
+	assert.Equal(t, expected, result)
 }
