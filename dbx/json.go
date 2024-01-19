@@ -17,7 +17,7 @@ func (j JSON) MarshalJSON() ([]byte, error) {
 	return j, nil
 }
 
-func (j *JSON) Scan(value interface{}) error {
+func (j *JSON) Scan(value any) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return fmt.Errorf("failed to unmarshal JSONB value: %v", value)

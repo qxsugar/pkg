@@ -10,7 +10,7 @@ const (
 	InternalErrorCode = -1
 )
 
-type HandlerFunc func(ctx *gin.Context) (interface{}, error)
+type HandlerFunc func(ctx *gin.Context) (any, error)
 
 type RouterGroup struct {
 	gin *gin.RouterGroup

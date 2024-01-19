@@ -20,7 +20,7 @@ func (u TimeStamp) MarshalJSON() ([]byte, error) {
 	return []byte(ts), nil
 }
 
-func (u *TimeStamp) Scan(src interface{}) error {
+func (u *TimeStamp) Scan(src any) error {
 	value, ok := src.(time.Time)
 	if ok {
 		*u = TimeStamp{Time: value}

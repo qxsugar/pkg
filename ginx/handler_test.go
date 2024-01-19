@@ -25,10 +25,10 @@ func setup() {
 func setupApp() *gin.Engine {
 	r := gin.Default()
 	r.GET("/ping", TranslateFunc(Pong))
-	r.GET("/invalidArgument", TranslateFunc(func(ctx *gin.Context) (interface{}, error) {
+	r.GET("/invalidArgument", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, NewInvalidArgumentError()
 	}))
-	r.GET("/customError", TranslateFunc(func(ctx *gin.Context) (interface{}, error) {
+	r.GET("/customError", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, CustomError
 	}))
 
