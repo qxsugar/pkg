@@ -1,3 +1,4 @@
 .idea
 tmp
-./CLAUDE.md
+CLAUDE.md
+.claude/*
