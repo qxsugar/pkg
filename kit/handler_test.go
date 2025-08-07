@@ -24,19 +24,19 @@ func setup() {
 
 func setupApp() *gin.Engine {
 	r := gin.Default()
-	
+
 	// Success cases
 	r.GET("/ping", TranslateFunc(Pong))
 	r.GET("/success-with-data", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return map[string]interface{}{
 			"message": "success",
-			"data": []int{1, 2, 3},
+			"data":    []int{1, 2, 3},
 		}, nil
 	}))
 	r.GET("/success-nil-data", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, nil
 	}))
-	
+
 	// Business error cases
 	r.GET("/invalidArgument", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, NewInvalidArgumentError()
@@ -47,15 +47,15 @@ func setupApp() *gin.Engine {
 	r.GET("/permissionDenied", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, NewPermissionDeniedError()
 	}))
-	
+
 	// Custom error cases
 	r.GET("/customError", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, CustomError
 	}))
 	r.GET("/nilError", TranslateFunc(func(ctx *gin.Context) (any, error) {
-		return nil, nil  // Return nil instead of (*Exception)(nil)
+		return nil, nil // Return nil instead of (*Exception)(nil)
 	}))
-	
+
 	// RouterGroup wrapper tests
 	group := NewRouterGroup(r.Group("/api"))
 	group.GET("/test", func(ctx *gin.Context) (any, error) {
@@ -150,7 +150,7 @@ func TestHandler(t *testing.T) {
 		err = json.Unmarshal(body, &respBody)
 		assert.Equal(t, err, nil)
 		assert.Equal(t, respBody.Code, ErrInvalidArgument)
-		assert.Equal(t, respBody.Info, messages[ErrInvalidArgument])
+		assert.Equal(t, respBody.Info, Messages[ErrInvalidArgument])
 		assert.Equal(t, respBody.Succeeded, false)
 	})
 
@@ -167,7 +167,7 @@ func TestHandler(t *testing.T) {
 		err = json.Unmarshal(body, &respBody)
 		assert.Equal(t, err, nil)
 		assert.Equal(t, respBody.Code, ErrNotFound)
-		assert.Equal(t, respBody.Info, messages[ErrNotFound])
+		assert.Equal(t, respBody.Info, Messages[ErrNotFound])
 		assert.Equal(t, respBody.Succeeded, false)
 		assert.Equal(t, respBody.Desc, "resource not found in database")
 	})
@@ -185,7 +185,7 @@ func TestHandler(t *testing.T) {
 		err = json.Unmarshal(body, &respBody)
 		assert.Equal(t, err, nil)
 		assert.Equal(t, respBody.Code, ErrPermissionDenied)
-		assert.Equal(t, respBody.Info, messages[ErrPermissionDenied])
+		assert.Equal(t, respBody.Info, Messages[ErrPermissionDenied])
 		assert.Equal(t, respBody.Succeeded, false)
 	})
 
@@ -204,7 +204,7 @@ func TestHandler(t *testing.T) {
 
 		assert.Equal(t, respBody.Succeeded, false)
 		assert.Equal(t, respBody.Code, InternalErrorCode)
-		assert.Equal(t, respBody.Info, messages[ErrInternal])
+		assert.Equal(t, respBody.Info, Messages[ErrInternal])
 		assert.Equal(t, respBody.Desc, CustomError.Error())
 	})
 
@@ -291,7 +291,7 @@ func TestTranslateFunc_ProductionMode(t *testing.T) {
 
 		assert.Equal(t, respBody.Succeeded, false)
 		assert.Equal(t, respBody.Code, ErrNotFound)
-		assert.Equal(t, respBody.Info, messages[ErrNotFound])
+		assert.Equal(t, respBody.Info, Messages[ErrNotFound])
 		assert.Equal(t, respBody.Desc, "") // Should be empty in production
 	})
 
@@ -309,7 +309,7 @@ func TestTranslateFunc_ProductionMode(t *testing.T) {
 
 		assert.Equal(t, respBody.Succeeded, false)
 		assert.Equal(t, respBody.Code, InternalErrorCode)
-		assert.Equal(t, respBody.Info, messages[ErrInternal])
+		assert.Equal(t, respBody.Info, Messages[ErrInternal])
 		assert.Equal(t, respBody.Desc, "") // Should be empty in production
 	})
 }

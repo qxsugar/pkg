@@ -73,7 +73,7 @@ func TranslateFunc(fun HandlerFunc) gin.HandlerFunc {
 				}
 			default:
 				respBody.Code = InternalErrorCode
-				respBody.Info = messages[ErrInternal]
+				respBody.Info = Messages[ErrInternal]
 				if gin.IsDebugging() && err != nil {
 					respBody.Desc = err.Error()
 				}

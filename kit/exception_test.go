@@ -53,27 +53,27 @@ func TestException_ErrorMethod(t *testing.T) {
 
 	t.Run("Error returns unknown message when both desc and info are empty", func(t *testing.T) {
 		ex := &Exception{code: ErrInternal}
-		assert.Equal(t, messages[ErrUnknown], ex.Error())
+		assert.Equal(t, Messages[ErrUnknown], ex.Error())
 	})
 }
 
 func TestException_BusinessErrorInterface(t *testing.T) {
 	ex := NewInvalidArgumentError()
-	
+
 	// Test that Exception implements BusinessError interface
 	var businessErr BusinessError = ex
 	assert.Equal(t, ErrInvalidArgument, businessErr.Code())
-	assert.Equal(t, messages[ErrInvalidArgument], businessErr.Info())
+	assert.Equal(t, Messages[ErrInvalidArgument], businessErr.Info())
 	assert.Equal(t, "", businessErr.Desc())
 }
 
 func TestException_ErrorInterface(t *testing.T) {
 	ex := NewInternalError()
-	
+
 	// Test that Exception implements error interface
 	var err error = ex
 	assert.NotNil(t, err)
-	assert.Contains(t, err.Error(), messages[ErrInternal])
+	assert.Contains(t, err.Error(), Messages[ErrInternal])
 }
 
 func TestPredefinedExceptions(t *testing.T) {
@@ -104,9 +104,9 @@ func TestPredefinedExceptions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ex := tc.factory()
 			assert.Equal(t, tc.expected, ex.Code())
-			
-			// Check if message exists in messages map
-			if msg, exists := messages[tc.expected]; exists {
+
+			// Check if message exists in Messages map
+			if msg, exists := Messages[tc.expected]; exists {
 				assert.Equal(t, msg, ex.Info())
 			}
 		})
@@ -137,7 +137,7 @@ func TestException_ChainedMethods(t *testing.T) {
 }
 
 func TestException_ErrorMessages(t *testing.T) {
-	t.Run("All error codes have messages", func(t *testing.T) {
+	t.Run("All error codes have Messages", func(t *testing.T) {
 		requiredMessages := []int{
 			ErrInvalidArgument,
 			ErrUnauthenticated,
@@ -153,9 +153,9 @@ func TestException_ErrorMessages(t *testing.T) {
 		}
 
 		for _, code := range requiredMessages {
-			msg, exists := messages[code]
-			assert.True(t, exists, "Message for error code %d should exist", code)
-			assert.NotEmpty(t, msg, "Message for error code %d should not be empty", code)
+			msg, exists := Messages[code]
+			assert.True(t, exists, "Messages for error code %d should exist", code)
+			assert.NotEmpty(t, msg, "Messages for error code %d should not be empty", code)
 		}
 	})
 }

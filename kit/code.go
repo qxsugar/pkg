@@ -23,7 +23,7 @@ const (
 	ErrDeadlineExceeded   = 504 // The request deadline has been exceeded. If it happens repeatedly, consider reducing the complexity of the request.
 )
 
-var messages = map[int]string{
+var Messages = map[int]string{
 	ErrInvalidArgument:   "Invalid argument",
 	ErrUnauthenticated:   "Invalid identity",
 	ErrPermissionDenied:  "Insufficient permissions",

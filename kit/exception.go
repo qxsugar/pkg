@@ -28,7 +28,7 @@ func (e *Exception) Error() string {
 	if e.info != "" {
 		return e.info
 	}
-	return messages[ErrUnknown]
+	return Messages[ErrUnknown]
 }
 
 // WithErr set desc = err.Error() when error is not nil
@@ -59,65 +59,65 @@ func NewException() *Exception {
 }
 
 func NewInvalidArgumentError() *Exception {
-	return newException(ErrInvalidArgument, messages[ErrInvalidArgument])
+	return newException(ErrInvalidArgument, Messages[ErrInvalidArgument])
 }
 
 func NewFailedPreconditionError() *Exception {
-	return newException(ErrFailedPrecondition, messages[ErrFailedPrecondition])
+	return newException(ErrFailedPrecondition, Messages[ErrFailedPrecondition])
 }
 
 func NewOutOfRangeError() *Exception {
-	return newException(ErrOutOfRange, messages[ErrOutOfRange])
+	return newException(ErrOutOfRange, Messages[ErrOutOfRange])
 }
 
 func NewUnauthenticatedError() *Exception {
-	return newException(ErrUnauthenticated, messages[ErrUnauthenticated])
+	return newException(ErrUnauthenticated, Messages[ErrUnauthenticated])
 }
 
 func NewPermissionDeniedError() *Exception {
-	return newException(ErrPermissionDenied, messages[ErrPermissionDenied])
+	return newException(ErrPermissionDenied, Messages[ErrPermissionDenied])
 }
 
 func NewNotFoundError() *Exception {
-	return newException(ErrNotFound, messages[ErrNotFound])
+	return newException(ErrNotFound, Messages[ErrNotFound])
 }
 
 func NewAbortedError() *Exception {
-	return newException(ErrAborted, messages[ErrAborted])
+	return newException(ErrAborted, Messages[ErrAborted])
 }
 
 func NewAlreadyExistsError() *Exception {
-	return newException(ErrAlreadyExists, messages[ErrAlreadyExists])
+	return newException(ErrAlreadyExists, Messages[ErrAlreadyExists])
 }
 
 func NewResourceExhaustedError() *Exception {
-	return newException(ErrResourceExhausted, messages[ErrResourceExhausted])
+	return newException(ErrResourceExhausted, Messages[ErrResourceExhausted])
 }
 
 func NewCancelledError() *Exception {
-	return newException(ErrCancelled, messages[ErrCancelled])
+	return newException(ErrCancelled, Messages[ErrCancelled])
 }
 
 func NewDataLossError() *Exception {
-	return newException(ErrDataLoss, messages[ErrDataLoss])
+	return newException(ErrDataLoss, Messages[ErrDataLoss])
 }
 
 func NewUnknownError() *Exception {
-	return newException(ErrUnknown, messages[ErrUnknown])
+	return newException(ErrUnknown, Messages[ErrUnknown])
 }
 
 func NewInternalError() *Exception {
-	return newException(ErrInternal, messages[ErrInternal])
+	return newException(ErrInternal, Messages[ErrInternal])
 }
 
 func NewNotImplementedError() *Exception {
-	return newException(ErrNotImplemented, messages[ErrNotImplemented])
+	return newException(ErrNotImplemented, Messages[ErrNotImplemented])
 }
 
 func NewUnavailableError() *Exception {
-	return newException(ErrUnavailable, messages[ErrUnavailable])
+	return newException(ErrUnavailable, Messages[ErrUnavailable])
 }
 
 func NewDeadlineExceededError() *Exception {
-	return newException(ErrDeadlineExceeded, messages[ErrDeadlineExceeded])
+	return newException(ErrDeadlineExceeded, Messages[ErrDeadlineExceeded])
 }
