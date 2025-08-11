@@ -1,0 +1,148 @@
+linters-settings:
+  govet:
+    # Report about shadowed variables
+    check-shadowing: true
+  
+  gocyclo:
+    # Minimal code complexity to report
+    min-complexity: 15
+  
+  maligned:
+    # Print struct with more effective memory layout
+    suggest-new: true
+  
+  dupl:
+    # Tokens count to trigger issue
+    threshold: 100
+  
+  goconst:
+    # Minimal length of string constant
+    min-len: 2
+    # Minimal occurrences count to trigger
+    min-occurrences: 2
+
+  depguard:
+    rules:
+      main:
+        deny:
+          - pkg: "github.com/sirupsen/logrus"
+            desc: "logging is allowed only by zap logger"
+  
+  misspell:
+    locale: US
+  
+  lll:
+    # Max line length
+    line-length: 140
+  
+  goimports:
+    # Put imports beginning with prefix after 3rd-party packages
+    local-prefixes: github.com/qxsugar/pkg
+  
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+
+linters:
+  enable:
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - exportloopref
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - noctx
+    - nolintlint
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+
+  # Don't use:
+  # - gochecknoglobals: we have some global variables that are fine
+  # - gocognit: we prefer gocyclo
+  # - godot: annoying for short comments
+  # - godox: we use TODO comments
+  # - wsl: too opinionated about newlines
+
+issues:
+  # List of regexps of issue texts to exclude
+  exclude:
+    # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+    - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+    - exported .* should have comment or be unexported
+    - should have a package comment
+
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+        - funlen
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+    - path: kit/pong.go
+      linters:
+        - deadcode
+        - unused
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+    - linters:
+        - lll
+      source: "^//go:generate "
+
+  # Independently of option `exclude` field above, set to true to run only fast linters from enabled linters set
+  fast: false
+
+run:
+  # timeout for analysis
+  timeout: 5m
+
+  # which dirs to skip: issues from them won't be reported
+  skip-dirs:
+    - vendor
+    - third_party
+
+  # which files to skip: they will be analyzed, but issues from them won't be reported
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*\\.gen\\.go$"
+
+  # by default isn't set. If set we pass it to "go list -mod={option}"
+  modules-download-mode: readonly
+
+# golangci.com configuration
+# https://github.com/golangci/golangci/wiki/Configuration
+service:
+  golangci-lint-version: 1.54.x # use the fixed version to not introduce new linters unexpectedly

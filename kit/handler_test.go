@@ -141,7 +141,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/invalidArgument", nil)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -158,7 +158,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/notFound", nil)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, http.StatusNotFound, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -176,7 +176,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/permissionDenied", nil)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, http.StatusForbidden, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -193,7 +193,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/customError", nil)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -259,6 +259,60 @@ func TestRouterGroup(t *testing.T) {
 			assert.Equal(t, respBody.Succeeded, true)
 			assert.Equal(t, respBody.Code, OK)
 			assert.Equal(t, respBody.RespData, tc.expectedData)
+		})
+	}
+}
+
+func TestHTTPStatusCodes(t *testing.T) {
+	r := gin.New()
+	
+	// Test various error codes and their HTTP status mappings
+	testCases := []struct {
+		name           string
+		errorFunc      func() *Exception
+		expectedHTTP   int
+		expectedCode   int
+	}{
+		{"InvalidArgument", NewInvalidArgumentError, http.StatusBadRequest, ErrInvalidArgument},
+		{"FailedPrecondition", NewFailedPreconditionError, http.StatusBadRequest, ErrFailedPrecondition},
+		{"OutOfRange", NewOutOfRangeError, http.StatusBadRequest, ErrOutOfRange},
+		{"Unauthenticated", NewUnauthenticatedError, http.StatusUnauthorized, ErrUnauthenticated},
+		{"PermissionDenied", NewPermissionDeniedError, http.StatusForbidden, ErrPermissionDenied},
+		{"NotFound", NewNotFoundError, http.StatusNotFound, ErrNotFound},
+		{"Aborted", NewAbortedError, http.StatusConflict, ErrAborted},
+		{"AlreadyExists", NewAlreadyExistsError, http.StatusConflict, ErrAlreadyExists},
+		{"ResourceExhausted", NewResourceExhaustedError, http.StatusTooManyRequests, ErrResourceExhausted},
+		{"Cancelled", NewCancelledError, 499, ErrCancelled},
+		{"DataLoss", NewDataLossError, http.StatusInternalServerError, ErrDataLoss},
+		{"Unknown", NewUnknownError, http.StatusInternalServerError, ErrUnknown},
+		{"Internal", NewInternalError, http.StatusInternalServerError, ErrInternal},
+		{"NotImplemented", NewNotImplementedError, http.StatusNotImplemented, ErrNotImplemented},
+		{"Unavailable", NewUnavailableError, http.StatusServiceUnavailable, ErrUnavailable},
+		{"DeadlineExceeded", NewDeadlineExceededError, http.StatusGatewayTimeout, ErrDeadlineExceeded},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			path := "/" + tc.name
+			r.GET(path, TranslateFunc(func(ctx *gin.Context) (any, error) {
+				return nil, tc.errorFunc()
+			}))
+
+			w := httptest.NewRecorder()
+			req, _ := http.NewRequest(http.MethodGet, path, nil)
+			r.ServeHTTP(w, req)
+
+			assert.Equal(t, tc.expectedHTTP, w.Code)
+
+			body, err := io.ReadAll(w.Body)
+			assert.Equal(t, err, nil)
+
+			respBody := RespBody{}
+			err = json.Unmarshal(body, &respBody)
+			assert.Equal(t, err, nil)
+
+			assert.Equal(t, tc.expectedCode, respBody.Code)
+			assert.Equal(t, false, respBody.Succeeded)
 		})
 	}
 }

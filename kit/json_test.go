@@ -39,18 +39,20 @@ func TestJSON(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, `{"key":"value"}`, string(*j))
 
-		// Test scanning string (should fail)
+		// Test scanning invalid string
 		err = j.Scan("invalid")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "failed to unmarshal JSONB value")
 		
 		// Test scanning nil
 		err = j.Scan(nil)
-		assert.Error(t, err)
+		assert.NoError(t, err)
+		assert.Equal(t, JSON{}, *j)
 		
 		// Test scanning empty byte slice
 		err = j.Scan([]byte{})
-		assert.Error(t, err)
+		assert.NoError(t, err)
+		assert.Equal(t, JSON{}, *j)
 		
 		// Test scanning invalid JSON
 		err = j.Scan([]byte(`{"invalid": json}`))

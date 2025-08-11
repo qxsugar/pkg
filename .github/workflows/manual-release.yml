@@ -137,12 +137,12 @@ jobs:
         git push origin $NEW_VERSION
     
     - name: Create GitHub Release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.next_version.outputs.new_version }}
-        release_name: Release ${{ steps.next_version.outputs.new_version }}
+        name: Release ${{ steps.next_version.outputs.new_version }}
         body: ${{ steps.release_notes.outputs.notes }}
         draft: false
         prerelease: false
