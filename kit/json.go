@@ -14,8 +14,8 @@ type JSON json.RawMessage
 
 // MarshalJSON implements json.Marshaler interface.
 func (j JSON) MarshalJSON() ([]byte, error) {
-	// null or empty string should be marshalled to null
-	if j == nil || len(j) == 0 {
+	// null or empty string should be marshaled to null
+	if len(j) == 0 {
 		return []byte("null"), nil
 	}
 	return j, nil

@@ -6,19 +6,19 @@ import (
 )
 
 type MockLocker struct {
-	sync.Mutex
+	mutex        sync.Mutex
 	lockCalled   bool
 	unlockCalled bool
 }
 
 func (m *MockLocker) Lock() {
 	m.lockCalled = true
-	m.Mutex.Lock()
+	m.mutex.Lock()
 }
 
 func (m *MockLocker) Unlock() {
 	m.unlockCalled = true
-	m.Mutex.Unlock()
+	m.mutex.Unlock()
 }
 
 func TestWithLock(t *testing.T) {

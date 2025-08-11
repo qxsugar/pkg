@@ -14,7 +14,7 @@ const (
 	ErrAborted            = 40901 // Concurrent conflict, such as read-modify-write conflict.
 	ErrAlreadyExists      = 40902 // The resource that the client tried to create already exists.
 	ErrResourceExhausted  = 42900 // Resource quota reached rate limit. The client should look for google.rpc.QuotaFailure error details for more information.
-	ErrCancelled          = 49900 // The client cancelled the request.
+	ErrCanceled           = 49900 // The client canceled the request.
 	ErrDataLoss           = 50001 // Irrecoverable data loss or data corruption. The client should report the error to the user.
 	ErrUnknown            = 50002 // Unknown server error. Typically a server error.
 	ErrInternal           = 50003 // Internal server error. Typically a server error.
@@ -24,42 +24,42 @@ const (
 )
 
 var Messages = map[int]string{
-	OK:                   "Success",
-	ErrInvalidArgument:   "Invalid argument",
+	OK:                    "Success",
+	ErrInvalidArgument:    "Invalid argument",
 	ErrFailedPrecondition: "Failed precondition",
-	ErrOutOfRange:        "Out of range",
-	ErrUnauthenticated:   "Invalid identity",
-	ErrPermissionDenied:  "Insufficient permissions",
-	ErrNotFound:          "Resource does not exist",
-	ErrAborted:           "Operation aborted",
-	ErrAlreadyExists:     "Resource already exists",
-	ErrResourceExhausted: "System busy",
-	ErrCancelled:         "Client cancelled request",
-	ErrDataLoss:          "Data loss occurred",
-	ErrUnknown:           "Unknown error",
-	ErrInternal:          "Internal error",
-	ErrNotImplemented:    "Method not implemented",
-	ErrUnavailable:       "Service suspended",
-	ErrDeadlineExceeded:  "System unable to execute",
+	ErrOutOfRange:         "Out of range",
+	ErrUnauthenticated:    "Invalid identity",
+	ErrPermissionDenied:   "Insufficient permissions",
+	ErrNotFound:           "Resource does not exist",
+	ErrAborted:            "Operation aborted",
+	ErrAlreadyExists:      "Resource already exists",
+	ErrResourceExhausted:  "System busy",
+	ErrCanceled:           "Client canceled request",
+	ErrDataLoss:           "Data loss occurred",
+	ErrUnknown:            "Unknown error",
+	ErrInternal:           "Internal error",
+	ErrNotImplemented:     "Method not implemented",
+	ErrUnavailable:        "Service suspended",
+	ErrDeadlineExceeded:   "System unable to execute",
 }
 
 // HTTPStatusCodes maps business error codes to HTTP status codes
 var HTTPStatusCodes = map[int]int{
-	OK:                   200, // OK
-	ErrInvalidArgument:   400, // Bad Request
+	OK:                    200, // OK
+	ErrInvalidArgument:    400, // Bad Request
 	ErrFailedPrecondition: 400, // Bad Request
-	ErrOutOfRange:        400, // Bad Request
-	ErrUnauthenticated:   401, // Unauthorized
-	ErrPermissionDenied:  403, // Forbidden
-	ErrNotFound:          404, // Not Found
-	ErrAborted:           409, // Conflict
-	ErrAlreadyExists:     409, // Conflict
-	ErrResourceExhausted: 429, // Too Many Requests
-	ErrCancelled:         499, // Client Closed Request
-	ErrDataLoss:          500, // Internal Server Error
-	ErrUnknown:           500, // Internal Server Error
-	ErrInternal:          500, // Internal Server Error
-	ErrNotImplemented:    501, // Not Implemented
-	ErrUnavailable:       503, // Service Unavailable
-	ErrDeadlineExceeded:  504, // Gateway Timeout
+	ErrOutOfRange:         400, // Bad Request
+	ErrUnauthenticated:    401, // Unauthorized
+	ErrPermissionDenied:   403, // Forbidden
+	ErrNotFound:           404, // Not Found
+	ErrAborted:            409, // Conflict
+	ErrAlreadyExists:      409, // Conflict
+	ErrResourceExhausted:  429, // Too Many Requests
+	ErrCanceled:           499, // Client Closed Request
+	ErrDataLoss:           500, // Internal Server Error
+	ErrUnknown:            500, // Internal Server Error
+	ErrInternal:           500, // Internal Server Error
+	ErrNotImplemented:     501, // Not Implemented
+	ErrUnavailable:        503, // Service Unavailable
+	ErrDeadlineExceeded:   504, // Gateway Timeout
 }

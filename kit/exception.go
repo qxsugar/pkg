@@ -94,8 +94,8 @@ func NewResourceExhaustedError() *Exception {
 	return newException(ErrResourceExhausted, Messages[ErrResourceExhausted])
 }
 
-func NewCancelledError() *Exception {
-	return newException(ErrCancelled, Messages[ErrCancelled])
+func NewCanceledError() *Exception {
+	return newException(ErrCanceled, Messages[ErrCanceled])
 }
 
 func NewDataLossError() *Exception {

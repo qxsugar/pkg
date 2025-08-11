@@ -100,12 +100,12 @@ func TranslateFunc(fun HandlerFunc) gin.HandlerFunc {
 				}
 			}
 
-			logger.Debugf("failed to handler http, code: %d, info: %s, desc: %s, http_status: %d", respBody.Code, respBody.Info, respBody.Desc, httpStatus)
+			logger.Debugf("failed to handler http, code: %d, info: %s, desc: %s, http_status: %d",
+				respBody.Code, respBody.Info, respBody.Desc, httpStatus)
 			ctx.JSON(httpStatus, respBody)
 			return
 		}
 
 		ctx.JSON(http.StatusOK, RespBody{Succeeded: true, RespData: resp})
-		return
 	}
 }

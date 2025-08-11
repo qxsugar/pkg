@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-var CustomError = errors.New("CustomError")
+var ErrCustom = errors.New("CustomError")
 
 func TestMain(m *testing.M) {
 	setup()
@@ -50,7 +50,7 @@ func setupApp() *gin.Engine {
 
 	// Custom error cases
 	r.GET("/customError", TranslateFunc(func(ctx *gin.Context) (any, error) {
-		return nil, CustomError
+		return nil, ErrCustom
 	}))
 	r.GET("/nilError", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, nil // Return nil instead of (*Exception)(nil)
@@ -82,7 +82,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test ping", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/ping", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/ping", http.NoBody)
 		app.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -101,7 +101,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test success with complex data", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/success-with-data", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/success-with-data", http.NoBody)
 		app.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -120,7 +120,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test success with nil data", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/success-nil-data", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/success-nil-data", http.NoBody)
 		app.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -139,7 +139,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test invalid argument error", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/invalidArgument", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/invalidArgument", http.NoBody)
 		app.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 
@@ -156,7 +156,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test not found error with description", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/notFound", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/notFound", http.NoBody)
 		app.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusNotFound, w.Code)
 
@@ -174,7 +174,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test permission denied error", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/permissionDenied", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/permissionDenied", http.NoBody)
 		app.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusForbidden, w.Code)
 
@@ -191,7 +191,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("test custom request error", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/customError", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/customError", http.NoBody)
 		app.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 
@@ -205,12 +205,12 @@ func TestHandler(t *testing.T) {
 		assert.Equal(t, respBody.Succeeded, false)
 		assert.Equal(t, respBody.Code, InternalErrorCode)
 		assert.Equal(t, respBody.Info, Messages[ErrInternal])
-		assert.Equal(t, respBody.Desc, CustomError.Error())
+		assert.Equal(t, respBody.Desc, ErrCustom.Error())
 	})
 
 	t.Run("test nil error", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/nilError", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/nilError", http.NoBody)
 		app.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusOK, w.Code)
 
@@ -244,7 +244,7 @@ func TestRouterGroup(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("test "+tc.method+" method", func(t *testing.T) {
 			w := httptest.NewRecorder()
-			req, _ := http.NewRequest(tc.method, tc.path, nil)
+			req, _ := http.NewRequest(tc.method, tc.path, http.NoBody)
 			app.ServeHTTP(w, req)
 
 			assert.Equal(t, http.StatusOK, w.Code)
@@ -265,13 +265,13 @@ func TestRouterGroup(t *testing.T) {
 
 func TestHTTPStatusCodes(t *testing.T) {
 	r := gin.New()
-	
+
 	// Test various error codes and their HTTP status mappings
 	testCases := []struct {
-		name           string
-		errorFunc      func() *Exception
-		expectedHTTP   int
-		expectedCode   int
+		name         string
+		errorFunc    func() *Exception
+		expectedHTTP int
+		expectedCode int
 	}{
 		{"InvalidArgument", NewInvalidArgumentError, http.StatusBadRequest, ErrInvalidArgument},
 		{"FailedPrecondition", NewFailedPreconditionError, http.StatusBadRequest, ErrFailedPrecondition},
@@ -281,14 +281,16 @@ func TestHTTPStatusCodes(t *testing.T) {
 		{"NotFound", NewNotFoundError, http.StatusNotFound, ErrNotFound},
 		{"Aborted", NewAbortedError, http.StatusConflict, ErrAborted},
 		{"AlreadyExists", NewAlreadyExistsError, http.StatusConflict, ErrAlreadyExists},
-		{"ResourceExhausted", NewResourceExhaustedError, http.StatusTooManyRequests, ErrResourceExhausted},
-		{"Cancelled", NewCancelledError, 499, ErrCancelled},
+		{"ResourceExhausted", NewResourceExhaustedError, http.StatusTooManyRequests,
+			ErrResourceExhausted},
+		{"Canceled", NewCanceledError, 499, ErrCanceled},
 		{"DataLoss", NewDataLossError, http.StatusInternalServerError, ErrDataLoss},
 		{"Unknown", NewUnknownError, http.StatusInternalServerError, ErrUnknown},
 		{"Internal", NewInternalError, http.StatusInternalServerError, ErrInternal},
 		{"NotImplemented", NewNotImplementedError, http.StatusNotImplemented, ErrNotImplemented},
 		{"Unavailable", NewUnavailableError, http.StatusServiceUnavailable, ErrUnavailable},
-		{"DeadlineExceeded", NewDeadlineExceededError, http.StatusGatewayTimeout, ErrDeadlineExceeded},
+		{"DeadlineExceeded", NewDeadlineExceededError, http.StatusGatewayTimeout,
+			ErrDeadlineExceeded},
 	}
 
 	for _, tc := range testCases {
@@ -299,7 +301,7 @@ func TestHTTPStatusCodes(t *testing.T) {
 			}))
 
 			w := httptest.NewRecorder()
-			req, _ := http.NewRequest(http.MethodGet, path, nil)
+			req, _ := http.NewRequest(http.MethodGet, path, http.NoBody)
 			r.ServeHTTP(w, req)
 
 			assert.Equal(t, tc.expectedHTTP, w.Code)
@@ -325,7 +327,8 @@ func TestTranslateFunc_ProductionMode(t *testing.T) {
 
 	r := gin.New()
 	r.GET("/business-error", TranslateFunc(func(ctx *gin.Context) (any, error) {
-		return nil, NewNotFoundError().WithErr(errors.New("sensitive error details"))
+		return nil, NewNotFoundError().WithErr(
+			errors.New("sensitive error details"))
 	}))
 	r.GET("/custom-error", TranslateFunc(func(ctx *gin.Context) (any, error) {
 		return nil, errors.New("sensitive custom error")
@@ -333,7 +336,7 @@ func TestTranslateFunc_ProductionMode(t *testing.T) {
 
 	t.Run("business error in production", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/business-error", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/business-error", http.NoBody)
 		r.ServeHTTP(w, req)
 
 		body, err := io.ReadAll(w.Body)
@@ -351,7 +354,7 @@ func TestTranslateFunc_ProductionMode(t *testing.T) {
 
 	t.Run("custom error in production", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/custom-error", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/custom-error", http.NoBody)
 		r.ServeHTTP(w, req)
 
 		body, err := io.ReadAll(w.Body)

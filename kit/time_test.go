@@ -31,8 +31,8 @@ func TestValue(t *testing.T) {
 	assert.IsType(t, ts.Time, val)
 
 	// Test zero time
-	zeroTs := TimeStamp{Time: time.Time{}}
-	val, err = zeroTs.Value()
+	zeroTS := TimeStamp{Time: time.Time{}}
+	val, err = zeroTS.Value()
 	assert.NoError(t, err)
 	assert.Nil(t, val)
 }
