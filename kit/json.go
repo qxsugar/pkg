@@ -56,8 +56,8 @@ func (j *JSON) Scan(value any) error {
 }
 
 // Value implements driver.Valuer interface for writing JSON data to database.
-func (j *JSON) Value() (driver.Value, error) {
-	if len(*j) == 0 {
+func (j JSON) Value() (driver.Value, error) {
+	if len(j) == 0 {
 		return nil, nil
 	}
 	return j.MarshalJSON()
