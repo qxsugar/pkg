@@ -7,7 +7,7 @@ type RespBody struct {
 	Code      int    `json:"code,omitempty"` // Business status code
 	Info      string `json:"info,omitempty"` // Business hints
 	Desc      string `json:"desc,omitempty"` // Exception hints, typically only appear in development mode
-}
+} // @name RespBody
 
 // PageBody represents a paginated response structure.
 type PageBody struct {
@@ -15,13 +15,13 @@ type PageBody struct {
 	Limit  int   `json:"limit"`  // Limit on the number of items
 	Total  int64 `json:"total"`  // Total number of items
 	List   any   `json:"list"`   // Data list
-}
+} // @name PageBody
 
 // RowAffectedBody represents the response structure for database operations
 // that return the number of affected rows.
 type RowAffectedBody struct {
 	Rows int64 `json:"rows"` // Number of affected rows
-}
+} // @name RowAffectedBody
 
 // BusinessError defines the interface for business-level errors that can be
 // properly handled and converted to structured API responses.
