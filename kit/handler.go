@@ -69,6 +69,10 @@ func (r *RouterGroup) PUT(relativePath string, handler HandlerFunc) *RouterGroup
 // 如果在开发模式下，返回 RespBody 中的 Desc 字段包含详细错误描述
 func TranslateFunc(fun HandlerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		if ctx.IsAborted() {
+			return
+		}
+
 		logger := zap.S().Named("TranslateFunc")
 
 		resp, err := fun(ctx)
