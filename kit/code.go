@@ -42,24 +42,3 @@ var Messages = map[int]string{
 	ErrUnavailable:        "Service suspended",
 	ErrDeadlineExceeded:   "System unable to execute",
 }
-
-// HTTPStatusCodes maps business error codes to HTTP status codes
-var HTTPStatusCodes = map[int]int{
-	OK:                    200, // OK
-	ErrInvalidArgument:    400, // Bad Request
-	ErrFailedPrecondition: 400, // Bad Request
-	ErrOutOfRange:         400, // Bad Request
-	ErrUnauthenticated:    401, // Unauthorized
-	ErrPermissionDenied:   403, // Forbidden
-	ErrNotFound:           404, // Not Found
-	ErrAborted:            409, // Conflict
-	ErrAlreadyExists:      409, // Conflict
-	ErrResourceExhausted:  429, // Too Many Requests
-	ErrCanceled:           499, // Client Closed Request
-	ErrDataLoss:           500, // Internal Server Error
-	ErrUnknown:            500, // Internal Server Error
-	ErrInternal:           500, // Internal Server Error
-	ErrNotImplemented:     501, // Not Implemented
-	ErrUnavailable:        503, // Service Unavailable
-	ErrDeadlineExceeded:   504, // Gateway Timeout
-}

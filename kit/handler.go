@@ -81,7 +81,6 @@ func TranslateFunc(fun HandlerFunc) gin.HandlerFunc {
 				Succeeded: false,
 			}
 
-			var httpStatus int
 			switch ex := err.(type) {
 			case BusinessError:
 				respBody.Code = ex.Code()
@@ -89,24 +88,16 @@ func TranslateFunc(fun HandlerFunc) gin.HandlerFunc {
 				if gin.IsDebugging() {
 					respBody.Desc = ex.Desc()
 				}
-				// Get appropriate HTTP status code, default to 500 if not found
-				if status, exists := HTTPStatusCodes[ex.Code()]; exists {
-					httpStatus = status
-				} else {
-					httpStatus = http.StatusInternalServerError
-				}
 			default:
 				respBody.Code = InternalErrorCode
 				respBody.Info = Messages[ErrInternal]
-				httpStatus = http.StatusInternalServerError
 				if gin.IsDebugging() && err != nil {
 					respBody.Desc = err.Error()
 				}
 			}
 
-			logger.Debugf("failed to handler http, code: %d, info: %s, desc: %s, http_status: %d",
-				respBody.Code, respBody.Info, respBody.Desc, httpStatus)
-			ctx.JSON(httpStatus, respBody)
+			logger.Warnf("failed to handler http, code: %d, info: %s, desc: %s", respBody.Code, respBody.Info, respBody.Desc)
+			ctx.JSON(http.StatusOK, respBody)
 			return
 		}
 

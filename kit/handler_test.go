@@ -141,7 +141,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/invalidArgument", http.NoBody)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -158,7 +158,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/notFound", http.NoBody)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusNotFound, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -176,7 +176,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/permissionDenied", http.NoBody)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusForbidden, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -193,7 +193,7 @@ func TestHandler(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/customError", http.NoBody)
 		app.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
 
 		body, err := io.ReadAll(w.Body)
 		assert.Equal(t, err, nil)
@@ -225,7 +225,6 @@ func TestHandler(t *testing.T) {
 		assert.Equal(t, respBody.Code, OK)
 	})
 }
-
 func TestRouterGroup(t *testing.T) {
 	app := setupApp()
 
@@ -273,23 +272,23 @@ func TestHTTPStatusCodes(t *testing.T) {
 		expectedHTTP int
 		expectedCode int
 	}{
-		{"InvalidArgument", NewInvalidArgumentError, http.StatusBadRequest, ErrInvalidArgument},
-		{"FailedPrecondition", NewFailedPreconditionError, http.StatusBadRequest, ErrFailedPrecondition},
-		{"OutOfRange", NewOutOfRangeError, http.StatusBadRequest, ErrOutOfRange},
-		{"Unauthenticated", NewUnauthenticatedError, http.StatusUnauthorized, ErrUnauthenticated},
-		{"PermissionDenied", NewPermissionDeniedError, http.StatusForbidden, ErrPermissionDenied},
-		{"NotFound", NewNotFoundError, http.StatusNotFound, ErrNotFound},
-		{"Aborted", NewAbortedError, http.StatusConflict, ErrAborted},
-		{"AlreadyExists", NewAlreadyExistsError, http.StatusConflict, ErrAlreadyExists},
-		{"ResourceExhausted", NewResourceExhaustedError, http.StatusTooManyRequests,
+		{"InvalidArgument", NewInvalidArgumentError, http.StatusOK, ErrInvalidArgument},
+		{"FailedPrecondition", NewFailedPreconditionError, http.StatusOK, ErrFailedPrecondition},
+		{"OutOfRange", NewOutOfRangeError, http.StatusOK, ErrOutOfRange},
+		{"Unauthenticated", NewUnauthenticatedError, http.StatusOK, ErrUnauthenticated},
+		{"PermissionDenied", NewPermissionDeniedError, http.StatusOK, ErrPermissionDenied},
+		{"NotFound", NewNotFoundError, http.StatusOK, ErrNotFound},
+		{"Aborted", NewAbortedError, http.StatusOK, ErrAborted},
+		{"AlreadyExists", NewAlreadyExistsError, http.StatusOK, ErrAlreadyExists},
+		{"ResourceExhausted", NewResourceExhaustedError, http.StatusOK,
 			ErrResourceExhausted},
-		{"Canceled", NewCanceledError, 499, ErrCanceled},
-		{"DataLoss", NewDataLossError, http.StatusInternalServerError, ErrDataLoss},
-		{"Unknown", NewUnknownError, http.StatusInternalServerError, ErrUnknown},
-		{"Internal", NewInternalError, http.StatusInternalServerError, ErrInternal},
-		{"NotImplemented", NewNotImplementedError, http.StatusNotImplemented, ErrNotImplemented},
-		{"Unavailable", NewUnavailableError, http.StatusServiceUnavailable, ErrUnavailable},
-		{"DeadlineExceeded", NewDeadlineExceededError, http.StatusGatewayTimeout,
+		{"Canceled", NewCanceledError, http.StatusOK, ErrCanceled},
+		{"DataLoss", NewDataLossError, http.StatusOK, ErrDataLoss},
+		{"Unknown", NewUnknownError, http.StatusOK, ErrUnknown},
+		{"Internal", NewInternalError, http.StatusOK, ErrInternal},
+		{"NotImplemented", NewNotImplementedError, http.StatusOK, ErrNotImplemented},
+		{"Unavailable", NewUnavailableError, http.StatusOK, ErrUnavailable},
+		{"DeadlineExceeded", NewDeadlineExceededError, http.StatusOK,
 			ErrDeadlineExceeded},
 	}
 
